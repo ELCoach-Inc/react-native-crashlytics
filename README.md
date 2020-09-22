@@ -20,7 +20,7 @@ import RnCrashlytics, { initCrashlytics } from '@elcoach/react-native-crashlytic
 
 logDetails = () => {
     // log app version
-    RnCrashlytics.setValueForKey('app_version', '2.0-alpha);
+    RnCrashlytics.setValueForKey('app_version', '2.0-alpha');
     RnCrashlytics.setValueForKey('some_other_key', 'some other value');
 }
 
