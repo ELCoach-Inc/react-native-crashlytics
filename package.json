@@ -20,7 +20,10 @@
     "baseUrl": "https://github.com/El-Coach/react-native-crashlytics"
   },
   "keywords": [
-    "react-native"
+    "react-native",
+    "firebase",
+    "crashlytics",
+    "elcoach"
   ],
   "author": {
     "name": "Muhammad Hashim",
