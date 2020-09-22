@@ -16,8 +16,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/El-Coach/react-native-crashlytics.git",
-    "baseUrl": "https://github.com/El-Coach/react-native-crashlytics"
+    "url": "git+https://github.com/ELCoach-Inc/react-native-crashlytics.git",
+    "baseUrl": "https://github.com/ELCoach-Inc/react-native-crashlytics"
   },
   "keywords": [
     "react-native",
