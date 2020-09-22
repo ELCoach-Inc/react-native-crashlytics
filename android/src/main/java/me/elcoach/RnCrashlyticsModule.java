@@ -2,12 +2,16 @@ package me.elcoach;
 
 import android.util.Log;
 
+import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 import java.text.NumberFormat;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 
@@ -20,6 +24,7 @@ public class RnCrashlyticsModule extends ReactContextBaseJavaModule {
 		super(reactContext);
 		this.reactContext = reactContext;
 		crashlytics = FirebaseCrashlytics.getInstance();
+		crashlytics.setCrashlyticsCollectionEnabled(true);
 	}
 
 	@Override
@@ -38,17 +43,41 @@ public class RnCrashlyticsModule extends ReactContextBaseJavaModule {
 	    throw new RuntimeException("Crash test – Forced crash by react-native-crashlytics");
     }
 
-	// TODO: support ios
-	// @ReactMethod
-	// public void logError(String errorMsg) {
-	// 	crashlytics.recordException(new RuntimeException(errorMsg));
-	// }
-
 	@ReactMethod
 	public void log(String message) {
 		crashlytics.log(message);
 	}
-	
+
+	// For internal use only.
+	@ReactMethod
+	public void logPromise(String message, Promise promise) {
+		crashlytics.log(message);
+		promise.resolve(null);
+	}
+
+	@ReactMethod
+	public void recordErrorPromise(ReadableMap jsErrorMap, Promise promise) {
+		recordJavaScriptError(jsErrorMap);
+		promise.resolve(null);
+	}
+
+	private void recordJavaScriptError(ReadableMap jsErrorMap) {
+		String message = jsErrorMap.getString("message");
+		ReadableArray stackFrames = Objects.requireNonNull(jsErrorMap.getArray("frames"));
+		Exception customException = new RuntimeException(message);
+		StackTraceElement[] stackTraceElements = new StackTraceElement[stackFrames.size()];
+
+		for (int i = 0; i < stackFrames.size(); i++) {
+			ReadableMap stackFrame = Objects.requireNonNull(stackFrames.getMap(i));
+			String fn = stackFrame.getString("fn");
+			String file = stackFrame.getString("file");
+			stackTraceElements[i] = new StackTraceElement("", fn, file, -1);
+		}
+
+		customException.setStackTrace(stackTraceElements);
+		crashlytics.recordException(customException);
+	}
+
 	@ReactMethod
 	public void setValueForKey(String key, String value) {
 		crashlytics.setCustomKey(key, value);
