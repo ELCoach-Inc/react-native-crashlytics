@@ -1,7 +1,7 @@
 {
   "name": "@elcoach/react-native-crashlytics",
   "title": "React Native Crashlytics",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Firebase Crashlytics React Native Package",
   "main": "index.js",
   "files": [
