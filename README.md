@@ -14,7 +14,7 @@ Follow Crashlytic's installation instructions for [iOS](https://firebase.google.
 `$ react-native link @elcoach/react-native-crashlytics`
 
 ## Usage
-In a starting point of your app:
+### In a starting point of your app:
 ```javascript
 import RnCrashlytics, { initCrashlytics } from '@elcoach/react-native-crashlytics';
 
@@ -27,13 +27,24 @@ const logDetails = () => {
 const cleanUp = () => {
     console.log('we crashed pretty hard');
 }
-RnCrashlytics.setUserID('user_id_goes_here');
-initCrashlytics(beforeLog = logDetails, afterLog = cleanUp);
+
+initCrashlytics(
+    userId = 'unique_user_id_goes_here',
+    beforeLog = logDetails,
+    afterLog = cleanUp
+);
 ```
 
-To test a crash:
+### To test a crash:
 
 ```javascript
 // you can be really creative here, sky is the limit.
-RnCrashlytics.crash()
+RnCrashlytics.crash();
+```
+
+### Fatal crashes
+By default, js errors are reported as non-fatal exceptions, while native errors are reported as fatal exceptions.  
+If you want to force-report all erros as fatal you can use the `forceFatal` flag (default – false):
+```js
+initCrashlytics(userId = ..., beforeLog = ..., afterLog = ..., forceFatal = true);
 ```
