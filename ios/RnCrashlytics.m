@@ -42,13 +42,20 @@ RCT_EXPORT_METHOD(recordErrorPromise:
       resolver:
       (RCTPromiseResolveBlock) resolve
       rejecter:
-      (RCTPromiseRejectBlock) reject) {
-      [self recordJavaScriptError:jsErrorDict];
+      (RCTPromiseRejectBlock) reject
+      forceFatal:
+      (BOOL) fatal) {
+      [self recordJavaScriptError:jsErrorDict forceFatal:fatal];
   resolve([NSNull null]);
 }
 
-- (void)recordJavaScriptError:(NSDictionary *)jsErrorDict {
+- (void)recordJavaScriptError:(NSDictionary *)jsErrorDict forceFatal:(BOOL)fatal {
   NSString *message = jsErrorDict[@"message"];
+
+  if (fatal) {
+    [NSException raise:@"Fatal Crash" format:message];
+  }
+
   NSDictionary *stackFrames = jsErrorDict[@"frames"];
   NSMutableArray *stackTrace = [[NSMutableArray alloc] init];
   for (NSDictionary *stackFrame in stackFrames) {
