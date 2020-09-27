@@ -40,6 +40,14 @@ function createNativeErrorObj(error, stackFrames, forceFatal) {
     return nativeObj;
 }
 
+/**
+ * initialize the crashlytics module.
+ * @param {String} userId unique user identifier.
+ * @param {function} beforeLog runs before logging an error. 
+ * @param {function} afterLog runs after logging an error.
+ * @param {boolean} forceFatal by default, js errors are reported as non-fatal exceptions, while native errors are reported as fatal exceptions.  
+use this flag to force-report all erros as fatal exceptions.
+ */
 export const initCrashlytics = (userId, beforeLog = () => ({}), afterLog = () => ({}), forceFatal = false) => {
 
     RnCrashlytics.setUserID(userId);
