@@ -40,7 +40,10 @@ function createNativeErrorObj(error, stackFrames, forceFatal) {
     return nativeObj;
 }
 
-export const initCrashlytics = (beforeLog = () => ({}), afterLog = () => ({}), forceFatal = false) => {
+export const initCrashlytics = (userId, beforeLog = () => ({}), afterLog = () => ({}), forceFatal = false) => {
+
+    RnCrashlytics.setUserID(userId);
+
     const originalHandler = ErrorUtils.getGlobalHandler();
     async function handler(error, fatal) {
         if (__DEV__) {
