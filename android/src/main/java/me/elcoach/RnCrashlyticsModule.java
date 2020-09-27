@@ -56,13 +56,15 @@ public class RnCrashlyticsModule extends ReactContextBaseJavaModule {
 	}
 
 	@ReactMethod
-	public void recordErrorPromise(ReadableMap jsErrorMap, Promise promise) {
-		recordJavaScriptError(jsErrorMap);
+	public void recordErrorPromise(ReadableMap jsErrorMap, Promise promise, boolean forceFatal) {
+		recordJavaScriptError(jsErrorMap, forceFatal);
 		promise.resolve(null);
 	}
 
-	private void recordJavaScriptError(ReadableMap jsErrorMap) {
+	private void recordJavaScriptError(ReadableMap jsErrorMap, boolean forceFatal) {
 		String message = jsErrorMap.getString("message");
+
+
 		ReadableArray stackFrames = Objects.requireNonNull(jsErrorMap.getArray("frames"));
 		Exception customException = new RuntimeException(message);
 		StackTraceElement[] stackTraceElements = new StackTraceElement[stackFrames.size()];
@@ -75,6 +77,9 @@ public class RnCrashlyticsModule extends ReactContextBaseJavaModule {
 		}
 
 		customException.setStackTrace(stackTraceElements);
+		if (forceFatal) {
+			throw new RuntimeException(customException);
+		}
 		crashlytics.recordException(customException);
 	}
 
