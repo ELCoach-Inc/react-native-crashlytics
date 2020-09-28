@@ -3,7 +3,7 @@
 @implementation RnCrashlytics
 @synthesize bridge = _bridge;
 
-// Expors module name (RnCrashlytics)
+// Exports module name (RnCrashlytics)
 RCT_EXPORT_MODULE()
 
 
@@ -30,11 +30,6 @@ RCT_EXPORT_METHOD(logPromise:
       (RCTPromiseRejectBlock) reject) {
   [[FIRCrashlytics crashlytics] log:message];
   resolve([NSNull null]);
-}
-
-RCT_EXPORT_METHOD(recordError:
-  (NSDictionary *) jsErrorDict) {
-      [self recordJavaScriptError:jsErrorDict];
 }
 
 RCT_EXPORT_METHOD(recordErrorPromise:
