@@ -34,12 +34,12 @@ RCT_EXPORT_METHOD(logPromise:
 
 RCT_EXPORT_METHOD(recordErrorPromise:
   (NSDictionary *) jsErrorDict
+      forceFatal:
+      (BOOL) fatal) {
       resolver:
       (RCTPromiseResolveBlock) resolve
       rejecter:
       (RCTPromiseRejectBlock) reject
-      forceFatal:
-      (BOOL) fatal) {
       [self recordJavaScriptError:jsErrorDict forceFatal:fatal];
   resolve([NSNull null]);
 }

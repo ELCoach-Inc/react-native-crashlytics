@@ -56,7 +56,7 @@ public class RnCrashlyticsModule extends ReactContextBaseJavaModule {
 	}
 
 	@ReactMethod
-	public void recordErrorPromise(ReadableMap jsErrorMap, Promise promise, boolean forceFatal) {
+	public void recordErrorPromise(ReadableMap jsErrorMap, boolean forceFatal, Promise promise) {
 		recordJavaScriptError(jsErrorMap, forceFatal);
 		promise.resolve(null);
 	}
