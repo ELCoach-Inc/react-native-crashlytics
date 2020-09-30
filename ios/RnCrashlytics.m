@@ -35,11 +35,11 @@ RCT_EXPORT_METHOD(logAsync:
 RCT_EXPORT_METHOD(recordErrorAsync:
   (NSDictionary *) jsErrorDict
       forceFatal:
-      (BOOL) fatal) {
+      (BOOL) fatal
       resolver:
       (RCTPromiseResolveBlock) resolve
       rejecter:
-      (RCTPromiseRejectBlock) reject
+      (RCTPromiseRejectBlock) reject) {
       [self recordJavaScriptError:jsErrorDict forceFatal:fatal];
   resolve([NSNull null]);
 }
