@@ -10,11 +10,9 @@ function isError(value) {
     return value instanceof Error;
 }
 
-function createNativeErrorObj(error, stackFrames, forceFatal) {
+function createNativeErrorObj(error, stackFrames) {
     const nativeObj = {};
-
     nativeObj.message = `${error.message}`;
-    nativeObj.forceFatal = forceFatal;
 
     nativeObj.frames = [];
     for (let i = 0; i < stackFrames.length; i++) {
@@ -55,7 +53,7 @@ export const initCrashlytics = (userId, beforeLog = () => ({}), afterLog = () =>
     const originalHandler = ErrorUtils.getGlobalHandler();
     async function handler(error, fatal) {
         if (__DEV__) {
-            return originalHandler(error, fatal);
+            return originalHandler(error, forceFatal || fatal);
         }
 
         beforeLog();
@@ -63,17 +61,17 @@ export const initCrashlytics = (userId, beforeLog = () => ({}), afterLog = () =>
         if (!isError(error)) {
             await RnCrashlytics.logAsync(`Unknown Error: ${error}`);
             afterLog();
-            return originalHandler(error, fatal);
+            return originalHandler(error, forceFatal || fatal);
         }
 
         try {
             const stackFrames = await StackTrace.fromError(error, { offline: true });
-            await RnCrashlytics.recordErrorAsync(createNativeErrorObj(error, stackFrames, forceFatal));
+            await RnCrashlytics.recordErrorAsync(createNativeErrorObj(error, stackFrames), forceFatal);
             afterLog();
         } catch (_) {
             // do nothing
         }
-        return originalHandler(error, fatal);
+        return originalHandler(error, forceFatal || fatal);
     }
 
     ErrorUtils.setGlobalHandler(handler);

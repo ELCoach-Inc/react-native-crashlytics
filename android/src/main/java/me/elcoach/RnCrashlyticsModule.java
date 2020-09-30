@@ -64,7 +64,6 @@ public class RnCrashlyticsModule extends ReactContextBaseJavaModule {
 	private void recordJavaScriptError(ReadableMap jsErrorMap, boolean forceFatal) {
 		String message = jsErrorMap.getString("message");
 
-
 		ReadableArray stackFrames = Objects.requireNonNull(jsErrorMap.getArray("frames"));
 		Exception customException = new RuntimeException(message);
 		StackTraceElement[] stackTraceElements = new StackTraceElement[stackFrames.size()];
