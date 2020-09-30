@@ -61,14 +61,14 @@ export const initCrashlytics = (userId, beforeLog = () => ({}), afterLog = () =>
         beforeLog();
 
         if (!isError(error)) {
-            await RnCrashlytics.logPromise(`Unknown Error: ${error}`);
+            await RnCrashlytics.logAsync(`Unknown Error: ${error}`);
             afterLog();
             return originalHandler(error, fatal);
         }
 
         try {
             const stackFrames = await StackTrace.fromError(error, { offline: true });
-            await RnCrashlytics.recordErrorPromise(createNativeErrorObj(error, stackFrames, forceFatal));
+            await RnCrashlytics.recordErrorAsync(createNativeErrorObj(error, stackFrames, forceFatal));
             afterLog();
         } catch (_) {
             // do nothing

@@ -50,13 +50,13 @@ public class RnCrashlyticsModule extends ReactContextBaseJavaModule {
 
 	// For internal use only.
 	@ReactMethod
-	public void logPromise(String message, Promise promise) {
+	public void logAsync(String message, Promise promise) {
 		crashlytics.log(message);
 		promise.resolve(null);
 	}
 
 	@ReactMethod
-	public void recordErrorPromise(ReadableMap jsErrorMap, boolean forceFatal, Promise promise) {
+	public void recordErrorAsync(ReadableMap jsErrorMap, boolean forceFatal, Promise promise) {
 		recordJavaScriptError(jsErrorMap, forceFatal);
 		promise.resolve(null);
 	}

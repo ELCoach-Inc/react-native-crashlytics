@@ -22,7 +22,7 @@ RCT_EXPORT_METHOD(log:(NSString *)message)
   [[FIRCrashlytics crashlytics] log:message];
 }
 
-RCT_EXPORT_METHOD(logPromise:
+RCT_EXPORT_METHOD(logAsync:
   (NSString *) message
       resolver:
       (RCTPromiseResolveBlock) resolve
@@ -32,7 +32,7 @@ RCT_EXPORT_METHOD(logPromise:
   resolve([NSNull null]);
 }
 
-RCT_EXPORT_METHOD(recordErrorPromise:
+RCT_EXPORT_METHOD(recordErrorAsync:
   (NSDictionary *) jsErrorDict
       forceFatal:
       (BOOL) fatal) {
