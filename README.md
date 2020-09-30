@@ -14,7 +14,7 @@ Follow Crashlytic's installation instructions for [iOS](https://firebase.google.
 `$ react-native link @elcoach/react-native-crashlytics`
 
 ## Usage
-### In a starting point of your app:
+### In a starting point of your app
 ```javascript
 import RnCrashlytics, { initCrashlytics } from '@elcoach/react-native-crashlytics';
 
@@ -35,7 +35,7 @@ initCrashlytics(
 );
 ```
 
-### To test a crash:
+### To test a crash
 
 ```javascript
 // you can be really creative here, sky is the limit.
