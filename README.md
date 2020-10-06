@@ -1,4 +1,4 @@
-# react-native-crashlytics
+# react-native-crashlytics [![npm version](https://badge.fury.io/js/%40elcoach%2Freact-native-crashlytics.svg)](https://badge.fury.io/js/%40elcoach%2Freact-native-crashlytics)
 A simple module for just Firebase Crashlytics; in case you still can't update your firebase setup for God-knows-what reasons you might have.    
 Code is heavily inspired by [invertase/react-native-firebase](https://github.com/invertase/react-native-firebase).
 ## Installation
@@ -46,5 +46,10 @@ RnCrashlytics.crash();
 By default, js errors are reported as non-fatal exceptions, while native errors are reported as fatal exceptions.  
 If you want to force-report all erros as fatal you can use the `forceFatal` flag (default – false):
 ```js
-initCrashlytics(userId = ..., beforeLog = ..., afterLog = ..., forceFatal = true);
+initCrashlytics(
+    userId = ...,
+    beforeLog = ...,
+    afterLog = ...,
+    forceFatal = true
+);
 ```
