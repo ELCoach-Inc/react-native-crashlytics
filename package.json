@@ -23,6 +23,10 @@
     "react-native",
     "firebase",
     "crashlytics",
+    "fabric",
+    "crash",
+    "reporting",
+    "fatal",
     "elcoach"
   ],
   "author": {
