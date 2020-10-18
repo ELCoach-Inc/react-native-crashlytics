@@ -13,6 +13,12 @@ Follow Crashlytic's installation instructions for [iOS](https://firebase.google.
 #### Link the package (for `RN < 60.0`)
 `$ react-native link @elcoach/react-native-crashlytics`
 
+## Versions
+Versions used in this module:  
+### Android
+`firebase-analytics: `**`17.5.0`**  
+`firebase-crashlytics: `**`17.2.1`**
+
 ## Usage
 ### In a starting point of your app
 ```javascript
@@ -28,7 +34,7 @@ const cleanUp = () => {
     console.log('we crashed pretty hard');
 }
 
-initCrashlytics(
+initCrashlytics (
     userId = 'unique_user_id_goes_here',
     beforeLog = logDetails,
     afterLog = cleanUp
@@ -46,7 +52,7 @@ RnCrashlytics.crash();
 By default, js errors are reported as non-fatal exceptions, while native errors are reported as fatal exceptions.  
 If you want to force-report all erros as fatal you can use the `forceFatal` flag (default – false):
 ```js
-initCrashlytics(
+initCrashlytics (
     userId = ...,
     beforeLog = ...,
     afterLog = ...,
