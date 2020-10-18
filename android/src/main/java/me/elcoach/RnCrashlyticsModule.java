@@ -1,5 +1,8 @@
 package me.elcoach;
 
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -17,18 +20,41 @@ public class RnCrashlyticsModule extends ReactContextBaseJavaModule {
 
 	private final ReactApplicationContext reactContext;
 	private final FirebaseCrashlytics crashlytics;
+	private boolean isAutoCollectionEnabled;
 
 	public RnCrashlyticsModule(ReactApplicationContext reactContext) {
 		super(reactContext);
 		this.reactContext = reactContext;
 		crashlytics = FirebaseCrashlytics.getInstance();
-		crashlytics.setCrashlyticsCollectionEnabled(true);
+		isAutoCollectionEnabled = isManifestAutoCollectionEnabled();
 	}
 
 	@Override
 	@NonNull
 	public String getName() {
 		return "RnCrashlytics";
+	}
+
+	private boolean isManifestAutoCollectionEnabled() {
+		try {
+			ApplicationInfo app = reactContext.getPackageManager().getApplicationInfo(reactContext.getPackageName(), PackageManager.GET_META_DATA);
+			Bundle bundle = app.metaData;
+			return bundle.getBoolean("firebase_crashlytics_collection_enabled", true);
+		} catch (PackageManager.NameNotFoundException | NullPointerException e) {
+			e.printStackTrace();
+		}
+		return true;
+	}
+
+	@ReactMethod
+	public void isCrashlyticsCollectionEnabledAsync(Promise promise) {
+		promise.resolve(isAutoCollectionEnabled);
+	}
+
+	@ReactMethod
+	public void setCrashlyticsCollectionEnabled(boolean value) {
+		isAutoCollectionEnabled = value;
+		crashlytics.setCrashlyticsCollectionEnabled(value);
 	}
 
 	@ReactMethod

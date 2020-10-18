@@ -7,6 +7,22 @@
 RCT_EXPORT_MODULE()
 
 
+RCT_EXPORT_METHOD(isCrashlyticsCollectionEnabledAsync:
+                  resolver:
+                  (RCTPromiseResolveBlock) resolve
+                  rejecter:
+                  (RCTPromiseRejectBlock) reject)
+{
+    resolve(@([[FIRCrashlytics crashlytics] isCrashlyticsCollectionEnabled]));
+}
+
+RCT_EXPORT_METHOD(setCrashlyticsCollectionEnabled:
+                  isEnabled:
+                  (BOOL) value)
+{
+    [[FIRCrashlytics crashlytics] setCrashlyticsCollectionEnabled:value];
+}
+
 RCT_EXPORT_METHOD(setUserID:(NSString *)userID)
 {
   [[FIRCrashlytics crashlytics] setUserID:userID];
