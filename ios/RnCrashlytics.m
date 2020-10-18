@@ -25,7 +25,7 @@ RCT_EXPORT_METHOD(setCrashlyticsCollectionEnabled:
 
 RCT_EXPORT_METHOD(setUserID:(NSString *)userID)
 {
-  [[FIRCrashlytics crashlytics] setUserID:userID];
+    [[FIRCrashlytics crashlytics] setUserID:userID];
 }
 
 RCT_EXPORT_METHOD(crash)
@@ -35,17 +35,17 @@ RCT_EXPORT_METHOD(crash)
 
 RCT_EXPORT_METHOD(log:(NSString *)message)
 {
-  [[FIRCrashlytics crashlytics] log:message];
+    [[FIRCrashlytics crashlytics] log:message];
 }
 
 RCT_EXPORT_METHOD(logAsync:
-  (NSString *) message
-      resolver:
-      (RCTPromiseResolveBlock) resolve
-      rejecter:
-      (RCTPromiseRejectBlock) reject) {
-  [[FIRCrashlytics crashlytics] log:message];
-  resolve([NSNull null]);
+                  (NSString *) message
+                  resolver:
+                  (RCTPromiseResolveBlock) resolve
+                  rejecter:
+                  (RCTPromiseRejectBlock) reject) {
+    [[FIRCrashlytics crashlytics] log:message];
+    resolve([NSNull null]);
 }
 
 RCT_EXPORT_METHOD(recordErrorAsync:
@@ -78,7 +78,7 @@ RCT_EXPORT_METHOD(recordErrorAsync:
 
 RCT_EXPORT_METHOD(setValueForKey:(NSString *)key value:(NSString *)value)
 {
-  [[FIRCrashlytics crashlytics] setCustomValue:value forKey:key];
+    [[FIRCrashlytics crashlytics] setCustomValue:value forKey:key];
 }
 
 @end

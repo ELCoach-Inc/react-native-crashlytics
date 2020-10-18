@@ -46,16 +46,13 @@ function createNativeErrorObj(error, stackFrames) {
  * @param {boolean} forceFatal by default, js errors are reported as non-fatal exceptions, while native errors are reported as fatal exceptions.  
 use this flag to force-report all erros as fatal exceptions.
  */
-export const initCrashlytics = (userId, beforeLog = () => ({}), afterLog = () => ({}), forceFatal = false) => {
+export const initCrashlytics = async (userId, beforeLog = () => ({}), afterLog = () => ({}), forceFatal = false) => {
 
     RnCrashlytics.setUserID(userId);
 
     const originalHandler = ErrorUtils.getGlobalHandler();
     async function handler(error, fatal) {
-        if (__DEV__) {
-            return originalHandler(error, forceFatal || fatal);
-        }
-
+        if (__DEV__) return originalHandler(error, forceFatal || fatal);
         beforeLog();
 
         if (!isError(error)) {
@@ -66,7 +63,7 @@ export const initCrashlytics = (userId, beforeLog = () => ({}), afterLog = () =>
 
         try {
             const stackFrames = await StackTrace.fromError(error, { offline: true });
-            await RnCrashlytics.recordErrorAsync(createNativeErrorObj(error, stackFrames), forceFatal);
+            await RnCrashlytics.recordErrorAsync(createNativeErrorObj(error, stackFrames));
             afterLog();
         } catch (_) {
             // do nothing
@@ -75,7 +72,6 @@ export const initCrashlytics = (userId, beforeLog = () => ({}), afterLog = () =>
     }
 
     ErrorUtils.setGlobalHandler(handler);
-    return handler;
 };
 
 export default RnCrashlytics;
