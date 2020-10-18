@@ -1,6 +1,5 @@
 package me.elcoach;
 
-import android.util.Log;
 
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -10,7 +9,6 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
-import java.text.NumberFormat;
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -39,9 +37,9 @@ public class RnCrashlyticsModule extends ReactContextBaseJavaModule {
 	}
 
 	@ReactMethod
-    public void crash() {
-	    throw new RuntimeException("Crash test – Forced crash by react-native-crashlytics");
-    }
+	public void crash() {
+		throw new RuntimeException("Crash test – Forced crash by react-native-crashlytics");
+	}
 
 	@ReactMethod
 	public void log(String message) {
@@ -56,12 +54,12 @@ public class RnCrashlyticsModule extends ReactContextBaseJavaModule {
 	}
 
 	@ReactMethod
-	public void recordErrorAsync(ReadableMap jsErrorMap, boolean forceFatal, Promise promise) {
-		recordJavaScriptError(jsErrorMap, forceFatal);
+	public void recordErrorAsync(ReadableMap jsErrorMap, Promise promise) {
+		recordJavaScriptError(jsErrorMap);
 		promise.resolve(null);
 	}
 
-	private void recordJavaScriptError(ReadableMap jsErrorMap, boolean forceFatal) {
+	private void recordJavaScriptError(ReadableMap jsErrorMap) {
 		String message = jsErrorMap.getString("message");
 
 		ReadableArray stackFrames = Objects.requireNonNull(jsErrorMap.getArray("frames"));
@@ -76,9 +74,6 @@ public class RnCrashlyticsModule extends ReactContextBaseJavaModule {
 		}
 
 		customException.setStackTrace(stackTraceElements);
-		if (forceFatal) {
-			throw new RuntimeException(customException);
-		}
 		crashlytics.recordException(customException);
 	}
 

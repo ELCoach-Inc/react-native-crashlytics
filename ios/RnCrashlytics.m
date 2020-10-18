@@ -33,36 +33,31 @@ RCT_EXPORT_METHOD(logAsync:
 }
 
 RCT_EXPORT_METHOD(recordErrorAsync:
-  (NSDictionary *) jsErrorDict
-      forceFatal:
-      (BOOL) fatal
-      resolver:
-      (RCTPromiseResolveBlock) resolve
-      rejecter:
-      (RCTPromiseRejectBlock) reject) {
-      [self recordJavaScriptError:jsErrorDict forceFatal:fatal];
-  resolve([NSNull null]);
+                  (NSDictionary *) jsErrorDict
+                  resolver:
+                  (RCTPromiseResolveBlock) resolve
+                  rejecter:
+                  (RCTPromiseRejectBlock) reject) {
+    if ([[FIRCrashlytics crashlytics] isCrashlyticsCollectionEnabled]) {
+        [self recordJavaScriptError: jsErrorDict];
+    }
+    resolve([NSNull null]);
 }
 
-- (void)recordJavaScriptError:(NSDictionary *)jsErrorDict forceFatal:(BOOL)fatal {
-  NSString *message = jsErrorDict[@"message"];
+- (void)recordJavaScriptError:(NSDictionary *)jsErrorDict {
+    NSString *message = jsErrorDict[@"message"];
+    NSDictionary *stackFrames = jsErrorDict[@"frames"];
+    NSMutableArray *stackTrace = [[NSMutableArray alloc] init];
+    for (NSDictionary *stackFrame in stackFrames) {
+        FIRStackFrame *customFrame = [FIRStackFrame stackFrameWithSymbol:stackFrame[@"fn"] file:stackFrame[@"file"] line:(uint32_t) [stackFrame[@"line"] intValue]];
+        [stackTrace addObject:customFrame];
+    }
 
-  if (fatal) {
-    [NSException raise:@"Fatal Crash" format:message];
-  }
+    NSString *name = @"JavaScriptError";
+    FIRExceptionModel *exceptionModel = [FIRExceptionModel exceptionModelWithName:name reason:message];
+    exceptionModel.stackTrace = stackTrace;
 
-  NSDictionary *stackFrames = jsErrorDict[@"frames"];
-  NSMutableArray *stackTrace = [[NSMutableArray alloc] init];
-  for (NSDictionary *stackFrame in stackFrames) {
-    FIRStackFrame *customFrame = [FIRStackFrame stackFrameWithSymbol:stackFrame[@"fn"] file:stackFrame[@"file"] line:(uint32_t) [stackFrame[@"line"] intValue]];
-    [stackTrace addObject:customFrame];
-  }
-
-  NSString *name = @"JavaScriptError";
-  FIRExceptionModel *exceptionModel = [FIRExceptionModel exceptionModelWithName:name reason:message];
-  exceptionModel.stackTrace = stackTrace;
-
-  [[FIRCrashlytics crashlytics] recordExceptionModel:exceptionModel];
+    [[FIRCrashlytics crashlytics] recordExceptionModel:exceptionModel];
 }
 
 RCT_EXPORT_METHOD(setValueForKey:(NSString *)key value:(NSString *)value)
